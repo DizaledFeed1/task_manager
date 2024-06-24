@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane prefHeight="268.0" prefWidth="522.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.task.WindowEdit">
+    <children>
+        <TextField fx:id="taskName" layoutX="319.0" layoutY="14.0" promptText="Task 1" />
+        <Text  layoutX="27.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Измените название задачи" />
+        <Text  layoutX="27.0" layoutY="72.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Измените описание задачи" />
+        <TextField fx:id="description" layoutX="319.0" layoutY="55.0" promptText="Description" />
+        <DatePicker fx:id="dueDate" layoutX="319.0" layoutY="103.0" prefHeight="25.0" prefWidth="149.0" promptText="1999-12-01" />
+        <Text layoutX="27.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Измените срок выполнения задачи" />
+        <Text layoutX="27.0" layoutY="167.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Индикатор выполнения" />
+        <RadioButton fx:id="completed" layoutX="386.0" layoutY="154.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" />
+        <Button fx:id="editButton" layoutX="219.0" layoutY="203.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="85.0" text="Изменить" />
+    </children>
+</AnchorPane>
