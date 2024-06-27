@@ -1,4 +1,4 @@
-package org.example.task;
+package org.example.task.taskManager;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,9 +13,9 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-public class WindowEdit implements Initializable {
+public class WindowAdd implements Initializable {
     @FXML
-    private Button editButton;
+    private Button addButton;
     @FXML
     private TextField taskName,description;
     @FXML
@@ -25,13 +25,13 @@ public class WindowEdit implements Initializable {
     HelloController helloController;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
-        editButton.setOnMouseClicked(event -> {
-            helloController.editTask(returnEdit());
-            Stage stage = (Stage) editButton.getScene().getWindow();
+        addButton.setOnMouseClicked(event -> {
+            helloController.addTask(returnAdd());
+            Stage stage = (Stage) addButton.getScene().getWindow();
             stage.close();
         });
     }
-    private ContainerAdd returnEdit(){
+    private ContainerAdd returnAdd(){
         String task_name = taskName.getText();
         String description_text = description.getText();
         LocalDate due_date = dueDate.getValue();
@@ -39,11 +39,7 @@ public class WindowEdit implements Initializable {
         ContainerAdd containerAdd = new ContainerAdd(task_name,description_text,due_date,completedFlag);
         return containerAdd;
     }
-    public void setHelloController(HelloController helloController,ContainerAdd containerAdd) {
+    public void setHelloController(HelloController helloController) {
         this.helloController = helloController;
-        taskName.setText(containerAdd.return_task_name());
-        description.setText(containerAdd.return_description());
-        dueDate.setValue(containerAdd.return_due_date());
-        completed.setSelected(containerAdd.return_completed());
     }
 }

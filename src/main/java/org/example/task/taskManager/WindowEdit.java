@@ -1,4 +1,4 @@
-package org.example.task;
+package org.example.task.taskManager;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -11,12 +11,11 @@ import org.example.task.containers.ContainerAdd;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.ResourceBundle;
 
-public class WindowAdd implements Initializable {
+public class WindowEdit implements Initializable {
     @FXML
-    private Button addButton;
+    private Button editButton;
     @FXML
     private TextField taskName,description;
     @FXML
@@ -26,13 +25,13 @@ public class WindowAdd implements Initializable {
     HelloController helloController;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
-        addButton.setOnMouseClicked(event -> {
-            helloController.addTask(returnAdd());
-            Stage stage = (Stage) addButton.getScene().getWindow();
+        editButton.setOnMouseClicked(event -> {
+            helloController.editTask(returnEdit());
+            Stage stage = (Stage) editButton.getScene().getWindow();
             stage.close();
         });
     }
-    private ContainerAdd returnAdd(){
+    private ContainerAdd returnEdit(){
         String task_name = taskName.getText();
         String description_text = description.getText();
         LocalDate due_date = dueDate.getValue();
@@ -40,7 +39,11 @@ public class WindowAdd implements Initializable {
         ContainerAdd containerAdd = new ContainerAdd(task_name,description_text,due_date,completedFlag);
         return containerAdd;
     }
-    public void setHelloController(HelloController helloController) {
+    public void setHelloController(HelloController helloController,ContainerAdd containerAdd) {
         this.helloController = helloController;
+        taskName.setText(containerAdd.return_task_name());
+        description.setText(containerAdd.return_description());
+        dueDate.setValue(containerAdd.return_due_date());
+        completed.setSelected(containerAdd.return_completed());
     }
 }

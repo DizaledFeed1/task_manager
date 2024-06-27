@@ -1,42 +1,49 @@
-package org.example.task;
+package org.example.task.taskManager;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.example.task.HelloApplication;
 import org.example.task.MySQL.SQL;
+import org.example.task.reception.ReceptionController;
 import org.example.task.containers.ContainerAdd;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-
-
 public class HelloController implements Initializable {
     @FXML
-    Button addTask,show,edit,deleteTask;
+    Button addTask,show,edit,deleteTask,singIn;
     @FXML
     ListView listTask;
     @FXML
     MenuItem date_up,date_down, statusup,statusdown;
     WindowAdd windowAdd;
     WindowEdit windowEdit;
+    ReceptionController receptionController;
+    int user_id = 0;
+    String role;
     SQL sql;
     int id;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
         sql = new SQL(this);
+
+        singIn.setOnMouseClicked(event -> {
+            if (user_id == 0) {
+                signInWindow();
+                System.out.println(user_id + role);
+            }
+        });
 
         date_up.setOnAction(event -> {
             listTask.getItems().clear();
@@ -56,12 +63,21 @@ public class HelloController implements Initializable {
         });
 
         addTask.setOnMouseClicked(event -> {
+            if (user_id == 0) {
+                signInWindow();
+            }
             addTaskWindow();
         });
         show.setOnMouseClicked(event -> {
+            if (user_id == 0) {
+                signInWindow();
+            }
             showFullTable();
         });
         deleteTask.setOnMouseClicked(event -> {
+            if (user_id == 0) {
+                signInWindow();
+            }
             deleteTask();
         });
         listTask.setOnMouseClicked(this::handleDoubleClick);
@@ -72,6 +88,39 @@ public class HelloController implements Initializable {
             editTaskWindow();
         }
     }
+
+    public void setPerson(int user_id, String role){
+        this.user_id = user_id;
+        this.role = role;
+    }
+
+    private void signInWindow(){
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("reception.fxml"));
+        try {
+            Stage signInStage = new Stage();
+            signInStage.initModality(Modality.APPLICATION_MODAL);
+            Scene consoleScene = new Scene(fxmlLoader.load());
+
+
+            receptionController = fxmlLoader.getController();
+            receptionController.setHelloController(this);
+
+            signInStage.setTitle("Консоль");
+            signInStage.setMinWidth(300);
+            signInStage.setMinHeight(400);
+
+            signInStage.setScene(consoleScene);
+            signInStage.setOnCloseRequest(event -> {
+                event.consume(); // Игнорировать запрос на закрытие окна
+            });
+            signInStage.showAndWait();
+            signInStage.close();
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private void addTaskWindow() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("addTask.fxml"));
@@ -94,7 +143,6 @@ public class HelloController implements Initializable {
             throw new RuntimeException(e);
         }
     }
-
 
     private void editTaskWindow(){
         try {
@@ -140,17 +188,22 @@ public class HelloController implements Initializable {
     }
 
     public void addTask(ContainerAdd containerAdd){
-        sql.addTaskSQL(containerAdd.return_task_name(), containerAdd.return_description(), containerAdd.return_due_date(),containerAdd.return_completed());
+        sql.addTaskSQL(containerAdd.return_task_name(), containerAdd.return_description(), containerAdd.return_due_date(),containerAdd.return_completed(),user_id);
         updateList(containerAdd);
     }
+
     public void updateList(ContainerAdd containerAdd){
         String text = "id: " + containerAdd.return_tasrk_id() + " task_name: " + containerAdd.return_task_name() + " description: " + containerAdd.return_description() + " due_date: " + containerAdd.return_due_date() + " completed: " + containerAdd.return_completed();
         System.out.println(text);
         listTask.getItems().add(text);
-        listTask.setStyle("-fx-background-color: #636363;");
     }
+
     private void showFullTable(){
         listTask.getItems().clear();
-        sql.showTable();
+        if (role.equals("admin")) {
+            sql.showTable();
+        } else if (user_id != 0 && role.equals("user")){
+            sql.showPersonalTable(user_id);
+        }
     }
 }

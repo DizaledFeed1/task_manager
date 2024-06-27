@@ -8,22 +8,18 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<Pane style="-fx-background-color: #636363;"
-      maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-      prefHeight="614.0" prefWidth="972.0"
-      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="org.example.task.HelloController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="614.0" prefWidth="972.0" style="-fx-background-color: #636363;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.task.taskManager.HelloController">
       <children>
-        <VBox style="-fx-background-color: #636363;" alignment="CENTER_LEFT" layoutX="-1.0" layoutY="-1.0" prefHeight="614.0" prefWidth="198.0" spacing="100.0">
+        <VBox alignment="CENTER_LEFT" layoutX="-1.0" layoutY="-1.0" prefHeight="614.0" prefWidth="198.0" spacing="100.0" style="-fx-background-color: #636363;">
             <children>
                 <Button fx:id="addTask" mnemonicParsing="false" text="Создать задачу" />
                 <Button fx:id="show" mnemonicParsing="false" text="Отобразить все задачи" />
-                <Button fx:id="edit" mnemonicParsing="false" text="-------" />
                 <Button fx:id="deleteTask" mnemonicParsing="false" text="Удалить задачу" />
+                <Button fx:id="edit" mnemonicParsing="false" text="Настройки " />
             </children>
         </VBox>
-        <ListView fx:id="listTask" style="-fx-background-color: #636363;" layoutX="195.0" layoutY="25.0" prefHeight="588.0" prefWidth="777.0" />
-      <MenuBar layoutX="865.0" layoutY="2.0" prefHeight="10.0" prefWidth="107.0">
+        <ListView fx:id="listTask" layoutX="195.0" layoutY="25.0" prefHeight="588.0" prefWidth="777.0" style="-fx-background-color: #636363;" />
+      <MenuBar layoutX="865.0" prefHeight="10.0" prefWidth="107.0">
         <menus>
           <Menu mnemonicParsing="false" text="Сортировать ">
             <items>
@@ -35,5 +31,6 @@
           </Menu>
         </menus>
       </MenuBar>
+      <Button fx:id="singIn" layoutX="197.0" mnemonicParsing="false" text="Sing In" />
     </children>
 </Pane>

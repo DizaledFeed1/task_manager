@@ -1,6 +1,6 @@
 package org.example.task.MySQL;
 
-import org.example.task.HelloController;
+import org.example.task.taskManager.HelloController;
 import org.example.task.containers.ContainerAdd;
 
 import java.sql.*;
@@ -13,13 +13,20 @@ public class SQL {
 
     private static Connection con;
     private static PreparedStatement preparedStatement;
-    private Savepoint save;
     static String query;
     private HelloController helloController;
 
     public SQL (HelloController helloController){
         try {
             this.helloController = helloController;
+            con = DriverManager.getConnection(url, user, password);
+            con.setAutoCommit(false); // Выключаем автозафиксацию
+        } catch (SQLException sqlEx) {
+            sqlEx.printStackTrace();
+        }
+    }
+    public SQL (){
+        try {
             con = DriverManager.getConnection(url, user, password);
             con.setAutoCommit(false); // Выключаем автозафиксацию
         } catch (SQLException sqlEx) {
@@ -87,8 +94,8 @@ public class SQL {
         }
     }
 
-    public void addTaskSQL(String task_name, String description, LocalDate due_date, boolean completed){
-        query = "insert into tasks (task_name, description, due_date, completed) value (?,?,?,?)";
+    public void addTaskSQL(String task_name, String description, LocalDate due_date, boolean completed,int user_id){
+        query = "insert into tasks (task_name, description, due_date, completed,user_id) value (?,?,?,?,?)";
 
         try {
             preparedStatement = con.prepareStatement(query);
@@ -96,6 +103,7 @@ public class SQL {
             preparedStatement.setString(2,description);
             preparedStatement.setDate(3, Date.valueOf(due_date));
             preparedStatement.setBoolean(4, completed);
+            preparedStatement.setInt(5, user_id);
             preparedStatement.executeUpdate();
 
             con.commit();
@@ -165,5 +173,50 @@ public class SQL {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void showPersonalTable(int user_id){
+        query = "SELECT t.tasrk_id, t.task_name, t.`description`, t.due_date, t.completed\n" +
+                "FROM tasks t\n" +
+                "JOIN users u ON t.user_id = u.user_id\n" +
+                "WHERE u.user_id = ?";
+
+        try {
+            preparedStatement = con.prepareStatement(query);
+            preparedStatement.setInt(1,user_id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                helloController.updateList(new ContainerAdd(resultSet.getInt("tasrk_id"), resultSet.getString("task_name"),resultSet.getString("description"),resultSet.getDate("due_date").toLocalDate(),resultSet.getBoolean("completed")));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void signIn(String login, String password){
+        query = "select * from users where username = ? and `password` = ?";
+        try {
+            preparedStatement = con.prepareStatement(query);
+            preparedStatement.setString(1,login);
+            preparedStatement.setString(2,password);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                helloController.setPerson(resultSet.getInt("user_id"),resultSet.getString("role"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void registerSQL(String username,String password) throws SQLException {
+        query = "insert into users (username,`password`,`role`) VALUE (?,?,?)";
+
+        preparedStatement = con.prepareStatement(query);
+        preparedStatement.setString(1,username);
+        preparedStatement.setString(2,password);
+        preparedStatement.setString(3,"user");
+        preparedStatement.executeUpdate();
+
+        con.commit();
     }
 }

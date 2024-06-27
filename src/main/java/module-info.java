@@ -5,5 +5,9 @@ module org.example.task {
 
 
     opens org.example.task to javafx.fxml;
+    exports org.example.task.taskManager;
+    opens org.example.task.taskManager to javafx.fxml;
     exports org.example.task;
+    exports org.example.task.reception;
+    opens org.example.task.reception to javafx.fxml;
 }

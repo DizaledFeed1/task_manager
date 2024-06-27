@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Text?>
 
 
-<AnchorPane prefHeight="268.0" prefWidth="522.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.task.WindowEdit">
+<AnchorPane prefHeight="268.0" prefWidth="522.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.task.taskManager.WindowEdit">
     <children>
         <TextField fx:id="taskName" layoutX="319.0" layoutY="14.0" promptText="Task 1" />
         <Text  layoutX="27.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Измените название задачи" />
