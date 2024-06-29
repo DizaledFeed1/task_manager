@@ -3,6 +3,7 @@ package org.example.task;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -18,6 +19,7 @@ public class HelloApplication extends Application {
         Scene scene = new Scene(fxmlLoader.load(), 972, 614);
         stage.setTitle("Task Manadger");
         stage.setScene(scene);
+        stage.getIcons().add(new Image(HelloApplication.class.getResourceAsStream("/img/icons.png")));
         stage.show();
     }
 

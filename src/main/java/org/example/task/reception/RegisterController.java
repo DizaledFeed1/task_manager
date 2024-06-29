@@ -27,16 +27,18 @@ public class RegisterController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         create.setOnMouseClicked(event -> {
             register();
-            Stage stage = (Stage) create.getScene().getWindow();
-            stage.close();
         });
 
     }
     private void register(){
-        if (password.getText().equals(checkPass.getText())){
+        if (password.getText().equals(checkPass.getText()) && !password.getText().equals("") && !checkPass.getText().equals("")){
             SQL sql = new SQL();
+            passimg.setVisible(false);
+            logimg.setVisible(false);
             try {
                 sql.registerSQL(login.getText(),password.getText());
+                Stage stage = (Stage) create.getScene().getWindow();
+                stage.close();
             }  catch (SQLIntegrityConstraintViolationException e) {
                 passimg.setVisible(true);
             }catch (SQLException e) {

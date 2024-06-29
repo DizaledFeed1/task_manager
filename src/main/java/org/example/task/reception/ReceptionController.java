@@ -38,11 +38,12 @@ public class ReceptionController implements Initializable {
             SQL sql = new SQL(helloController);
             if (!password.getText().equals("") && !login.getText().equals("")){
                 sql.signIn(login.getText(), password.getText());
+                Stage stage = (Stage) signIn.getScene().getWindow();
+                stage.close();
                 }else {
                 System.out.println("Пусто");
             }
-            Stage stage = (Stage) signIn.getScene().getWindow();
-            stage.close();
+
         });
         register.setOnMouseClicked(event -> {
             try {
