@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
@@ -15,17 +16,19 @@ import org.example.task.MySQL.SQL;
 import org.example.task.reception.ReceptionController;
 import org.example.task.containers.ContainerAdd;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class HelloController implements Initializable {
     @FXML
-    Button addTask,show,edit,deleteTask,singIn;
+    Button addTask,show,exit,deleteTask,singIn;
     @FXML
     ListView listTask;
     @FXML
     MenuItem date_up,date_down, statusup,statusdown;
+    @FXML
+    Menu menu;
     WindowAdd windowAdd;
     WindowEdit windowEdit;
     ReceptionController receptionController;
@@ -37,14 +40,26 @@ public class HelloController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
         sql = new SQL(this);
-
+        loadBinaryFile();
+        if (user_id != 0){
+            swapeDisable();
+        }
         singIn.setOnMouseClicked(event -> {
             if (user_id == 0) {
                 signInWindow();
+                swapeDisable();
+                saveBinaryFile();
                 System.out.println(user_id + role);
             }
         });
-
+        exit.setOnMouseClicked(event -> {
+            if (user_id != 0) {
+                swapeDisable();
+                user_id = 0;
+                role = null;
+                saveBinaryFile();
+            }
+        });
         date_up.setOnAction(event -> {
             listTask.getItems().clear();
             sql.sorting_by_date_up();
@@ -89,9 +104,41 @@ public class HelloController implements Initializable {
         }
     }
 
+    private void swapeDisable(){
+        addTask.setDisable(!addTask.isDisable());
+        show.setDisable(!show.isDisable());
+        exit.setDisable(!exit.isDisable());
+        deleteTask.setDisable(!deleteTask.isDisable());
+        singIn.setDisable(!singIn.isDisable());
+        menu.setDisable(!menu.isDisable());
+    }
+
     public void setPerson(int user_id, String role){
         this.user_id = user_id;
         this.role = role;
+    }
+
+    private void saveBinaryFile() {
+        try (FileOutputStream fileOutputStream = new FileOutputStream("settings.bin");
+             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
+            objectOutputStream.write(user_id);
+            objectOutputStream.writeObject(role);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void loadBinaryFile(){
+        try (FileInputStream fileInputStream = new FileInputStream("settings.bin");
+        ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)){
+            user_id = objectInputStream.read();
+            role = (String) objectInputStream.readObject();
+            System.out.println(user_id + role);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void signInWindow(){

@@ -12,16 +12,16 @@
       <children>
         <VBox alignment="CENTER_LEFT" layoutX="-1.0" layoutY="-1.0" prefHeight="614.0" prefWidth="198.0" spacing="100.0" style="-fx-background-color: #636363;">
             <children>
-                <Button fx:id="addTask" mnemonicParsing="false" text="Создать задачу" />
-                <Button fx:id="show" mnemonicParsing="false" text="Отобразить все задачи" />
-                <Button fx:id="deleteTask" mnemonicParsing="false" text="Удалить задачу" />
-                <Button fx:id="edit" mnemonicParsing="false" text="Настройки " />
+                <Button fx:id="addTask" disable="true" mnemonicParsing="false" text="Создать задачу" />
+                <Button fx:id="show" disable="true" mnemonicParsing="false" text="Отобразить все задачи" />
+                <Button fx:id="deleteTask" disable="true" mnemonicParsing="false" text="Удалить задачу" />
+                <Button fx:id="exit" disable="true" mnemonicParsing="false" text="Exit" />
             </children>
         </VBox>
         <ListView fx:id="listTask" layoutX="195.0" layoutY="25.0" prefHeight="588.0" prefWidth="777.0" style="-fx-background-color: #636363;" />
       <MenuBar layoutX="865.0" prefHeight="10.0" prefWidth="107.0">
         <menus>
-          <Menu mnemonicParsing="false" text="Сортировать ">
+          <Menu fx:id="menu" disable="true" mnemonicParsing="false" text="Сортировать ">
             <items>
                   <MenuItem fx:id="date_up" mnemonicParsing="false" text="По дате выполнения ⬆" />
                   <MenuItem fx:id="date_down" mnemonicParsing="false" text="По дате выполнения ⬇" />
